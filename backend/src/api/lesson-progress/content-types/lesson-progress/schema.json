@@ -10,5 +10,14 @@
     "draftAndPublish": true
   },
   "pluginOptions": {},
-  "attributes": {}
+  "attributes": {
+    "completed": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "completedAt": {
+      "type": "datetime"
+    }
+  }
 }
