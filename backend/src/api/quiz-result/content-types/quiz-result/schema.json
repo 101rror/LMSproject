@@ -1,0 +1,14 @@
+{
+  "kind": "collectionType",
+  "collectionName": "quiz_results",
+  "info": {
+    "singularName": "quiz-result",
+    "pluralName": "quiz-results",
+    "displayName": "QuizResult"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {}
+}
