@@ -25,6 +25,12 @@
     "lessonOrder": {
       "type": "integer",
       "required": true
+    },
+    "course": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::course.course",
+      "inversedBy": "lessons"
     }
   }
 }

@@ -18,6 +18,12 @@
     },
     "completedAt": {
       "type": "datetime"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "lesson_progress"
     }
   }
 }
