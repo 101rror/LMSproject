@@ -12,7 +12,8 @@
   "pluginOptions": {},
   "attributes": {
     "enrolledAt": {
-      "type": "datetime"
+      "type": "datetime",
+      "required": true
     },
     "course": {
       "type": "relation",

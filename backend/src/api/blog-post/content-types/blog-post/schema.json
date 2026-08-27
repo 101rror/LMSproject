@@ -39,6 +39,12 @@
         "draft",
         "published"
       ]
+    },
+    "author": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "blog_posts"
     }
   }
 }

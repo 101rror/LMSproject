@@ -24,13 +24,20 @@
       "required": true
     },
     "submittedAt": {
-      "type": "datetime"
+      "type": "datetime",
+      "required": true
     },
     "user": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "quiz_results"
+    },
+    "quiz": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::quiz.quiz",
+      "inversedBy": "results"
     }
   }
 }
