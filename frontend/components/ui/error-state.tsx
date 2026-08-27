@@ -1,0 +1,2 @@
+import { Button } from './button';
+export function ErrorState({ message = 'We could not load this just now.', onRetry }: { message?: string; onRetry?: () => void }) { return <div className="rounded-2xl border border-[#f1c7bd] bg-[#fff5f1] p-10 text-center"><h3 className="font-[family-name:var(--font-display)] text-2xl">A small hiccup.</h3><p className="mt-2 text-sm text-[#8b6259]">{message}</p>{onRetry && <Button onClick={onRetry} variant="secondary" className="mt-5">Try again</Button>}</div>; }

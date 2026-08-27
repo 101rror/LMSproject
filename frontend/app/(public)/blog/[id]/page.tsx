@@ -1,0 +1,6 @@
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
+import { SiteHeader } from '@/components/layout/site-header';
+import { Badge } from '@/components/ui/badge';
+import { posts } from '@/lib/api/data';
+export default async function BlogDetails({ params }: { params: Promise<{ id: string }> }) { const { id } = await params; const post = posts.find(item => item.id === id) || posts[0]; return <><SiteHeader /><main className="mx-auto max-w-3xl px-6 py-16"><Link href="/blog" className="inline-flex items-center gap-2 text-sm font-bold text-[#71807a]"><ArrowLeft size={16} /> All journal notes</Link><article className="mt-20"><Badge tone="coral">{post.category}</Badge><h1 className="mt-6 font-[family-name:var(--font-display)] text-6xl leading-none">{post.title}</h1><p className="mt-6 text-sm font-bold text-[#87938d]">{post.date} · {post.readTime}</p><div className="mt-14 space-y-6 text-lg leading-9 text-[#53665e]"><p>{post.excerpt}</p><p>Good learning rarely arrives as a neat, linear transformation. It tends to show up as a question you cannot stop carrying, a useful tension, or the sudden ability to see a familiar problem from another angle.</p><p>Make space for that unfinished middle. It is often where the interesting work begins.</p></div></article></main></> }

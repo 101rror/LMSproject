@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export default function NotFound() { return <main className="grid min-h-screen place-items-center p-6 text-center"><div><p className="text-sm font-bold text-[var(--coral)]">404</p><h1 className="mt-3 font-[family-name:var(--font-display)] text-5xl">That page wandered off.</h1><Link href="/" className="mt-8 inline-block font-bold text-[var(--coral)]">Back to Luma</Link></div></main>; }

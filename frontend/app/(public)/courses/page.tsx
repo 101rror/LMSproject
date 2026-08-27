@@ -1,0 +1,5 @@
+import { SiteHeader } from '@/components/layout/site-header';
+import { CourseCard } from '@/components/courses/course-card';
+import { PageHeader } from '@/components/ui/page-header';
+import { courses } from '@/lib/api/data';
+export default function CoursesPage() { return <><SiteHeader /><main className="mx-auto max-w-7xl px-6 py-20"><PageHeader eyebrow="Course library" title="Follow your curiosity." description="Short, focused courses designed to help you move from interested to capable." /><div className="mt-14 flex flex-wrap gap-2 border-b border-[var(--line)] pb-5 text-sm font-semibold"><button className="rounded-full bg-[var(--ink)] px-4 py-2 text-white">All courses</button><button className="rounded-full px-4 py-2 text-[#71807a] hover:bg-white">Design thinking</button><button className="rounded-full px-4 py-2 text-[#71807a] hover:bg-white">Productivity</button><button className="rounded-full px-4 py-2 text-[#71807a] hover:bg-white">Communication</button></div><div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-4">{courses.map(course => <CourseCard key={course.id} course={course} />)}</div></main></> }

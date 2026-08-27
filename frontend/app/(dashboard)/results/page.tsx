@@ -1,0 +1,7 @@
+import { ArrowUpRight, CheckCircle2 } from 'lucide-react';
+import Link from 'next/link';
+import { PageHeader } from '@/components/ui/page-header';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+export default function ResultsPage() { return <div><PageHeader eyebrow="Your progress" title="Results" description="A record of the things you have understood and practiced." /><div className="mt-14 space-y-3"><Result title="Make it memorable" course="The Creative Strategist" score="92%" date="Aug 24, 2026" /><Result title="The attention audit" course="Make Space for Focus" score="86%" date="Aug 12, 2026" /><Result title="A map for messy ideas" course="The Creative Strategist" score="100%" date="Aug 02, 2026" /></div></div> }
+function Result({ title, course, score, date }: { title: string; course: string; score: string; date: string }) { return <Card className="flex flex-wrap items-center gap-5 p-5 md:p-6"><div className="grid h-11 w-11 place-items-center rounded-full bg-[#dcebe1] text-[#4f8a72]"><CheckCircle2 size={21} /></div><div className="min-w-[180px] flex-1"><p className="font-semibold">{title}</p><p className="mt-1 text-sm text-[#71807a]">{course} · {date}</p></div><Badge tone="mint">{score}</Badge><Link href="/courses/1" className="grid h-10 w-10 place-items-center rounded-full bg-[#f1f3ee] hover:bg-[var(--mint)]"><ArrowUpRight size={17} /></Link></Card> }
