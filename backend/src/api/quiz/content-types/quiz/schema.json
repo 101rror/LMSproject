@@ -11,7 +11,7 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "title": {
+    "quizTitle": {
       "type": "string",
       "required": true
     }

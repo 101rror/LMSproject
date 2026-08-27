@@ -10,5 +10,21 @@
     "draftAndPublish": true
   },
   "pluginOptions": {},
-  "attributes": {}
+  "attributes": {
+    "score": {
+      "type": "integer",
+      "required": true
+    },
+    "totalQuestions": {
+      "type": "integer",
+      "required": true
+    },
+    "percentage": {
+      "type": "decimal",
+      "required": true
+    },
+    "submittedAt": {
+      "type": "datetime"
+    }
+  }
 }

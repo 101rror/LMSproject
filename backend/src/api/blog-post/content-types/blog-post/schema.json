@@ -30,6 +30,15 @@
       "allowedTypes": [
         "images"
       ]
+    },
+    "postStatus": {
+      "type": "enumeration",
+      "required": true,
+      "default": "draft",
+      "enum": [
+        "draft",
+        "published"
+      ]
     }
   }
 }

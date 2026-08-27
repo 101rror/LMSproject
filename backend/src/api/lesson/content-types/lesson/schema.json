@@ -11,18 +11,18 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "title": {
+    "lessonTitle": {
       "type": "string",
       "required": true
     },
-    "content": {
+    "lessonContent": {
       "type": "text",
       "required": true
     },
     "videoUrl": {
       "type": "string"
     },
-    "order": {
+    "lessonOrder": {
       "type": "integer",
       "required": true
     }

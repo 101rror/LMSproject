@@ -10,5 +10,36 @@
     "draftAndPublish": true
   },
   "pluginOptions": {},
-  "attributes": {}
+  "attributes": {
+    "questionText": {
+      "type": "text",
+      "required": true
+    },
+    "optionA": {
+      "type": "string",
+      "required": true
+    },
+    "optionB": {
+      "type": "string",
+      "required": true
+    },
+    "optionC": {
+      "type": "string",
+      "required": true
+    },
+    "optionD": {
+      "type": "string",
+      "required": true
+    },
+    "correctAnswer": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    }
+  }
 }
