@@ -1,8 +1,153 @@
+'use client';
+
 import Link from 'next/link';
-import { ArrowRight, Sparkles } from 'lucide-react';
-import { SiteHeader } from '@/components/layout/site-header';
+import { Header } from '@/components/layout/Header';
+import { useCourses } from '@/hooks/useCourses';
+import { usePublishedPosts } from '@/hooks/useBlog';
+import { CourseList } from '@/components/courses/CourseList';
+import { BlogList } from '@/components/blog/BlogList';
 import { Button } from '@/components/ui/button';
-import { CourseCard } from '@/components/courses/course-card';
-import { courses, posts } from '@/lib/api/data';
-export default function Home() { return <><SiteHeader /><main><section className="mx-auto grid max-w-7xl gap-14 px-6 pb-24 pt-20 lg:grid-cols-[1.1fr_.9fr] lg:items-center lg:pt-28"><div className="max-w-2xl"><div className="mb-7 inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-white px-4 py-2 text-xs font-bold uppercase tracking-[.15em] text-[#71807a]"><Sparkles size={14} className="text-[var(--coral)]" /> Learning, with intention</div><h1 className="font-[family-name:var(--font-display)] text-6xl leading-[.98] tracking-tight md:text-8xl">Make room for <em className="text-[var(--coral)]">better</em> thinking.</h1><p className="mt-8 max-w-lg text-lg leading-8 text-[#65736d]">Luma is a learning space for curious people building useful skills, thoughtful careers, and a life of their own design.</p><div className="mt-9 flex flex-wrap gap-3"><Button href="/courses">Explore the library <ArrowRight size={17} className="ml-2" /></Button><Button href="/register" variant="secondary">Start learning free</Button></div></div><div className="relative min-h-[430px] overflow-hidden rounded-[2rem] bg-[#cfe5dc] p-8"><div className="absolute -right-8 -top-10 h-64 w-64 rounded-full border-[34px] border-[#f7f4ed]/60" /><div className="absolute bottom-0 left-0 h-44 w-44 rounded-tr-[5rem] bg-[#e77c62]" /><div className="relative flex h-full flex-col justify-between"><span className="text-sm font-bold">01 / 04</span><div><div className="mb-5 h-24 w-24 rounded-full bg-[#f7f4ed]" /><p className="max-w-xs font-[family-name:var(--font-display)] text-4xl leading-tight">Learn deeply. Live widely.</p></div></div></div></section><section className="border-y border-[var(--line)] bg-white"><div className="mx-auto grid max-w-7xl gap-8 px-6 py-12 md:grid-cols-3"><Stat value="12k+" label="learners making progress" /><Stat value="48" label="courses with a point of view" /><Stat value="94%" label="would recommend Luma" /></div></section><section className="mx-auto max-w-7xl px-6 py-24"><div className="mb-10 flex items-end justify-between"><div><p className="text-xs font-bold uppercase tracking-[.18em] text-[var(--coral)]">The library</p><h2 className="mt-3 font-[family-name:var(--font-display)] text-4xl">A good place to begin.</h2></div><Link href="/courses" className="hidden items-center gap-2 text-sm font-bold md:flex">View all <ArrowRight size={16} /></Link></div><div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">{courses.map(course => <CourseCard key={course.id} course={course} />)}</div></section><section className="mx-auto max-w-7xl px-6 pb-24"><div className="rounded-[2rem] bg-[var(--ink)] p-8 text-[var(--paper)] md:p-14"><div className="grid gap-12 md:grid-cols-[1fr_1.2fr] md:items-end"><h2 className="font-[family-name:var(--font-display)] text-5xl leading-none">Notes for the<br /><span className="text-[#9fc9b9]">in-between.</span></h2><div className="space-y-6">{posts.slice(0, 2).map(post => <Link href={`/blog/${post.id}`} key={post.id} className="flex justify-between gap-5 border-b border-white/20 pb-5"><span><span className="mb-2 block text-xs font-bold uppercase tracking-wider text-[#9fc9b9]">{post.category}</span><span className="font-[family-name:var(--font-display)] text-2xl">{post.title}</span></span><ArrowRight className="shrink-0" /></Link>)}</div></div></div></section></main></> }
-function Stat({ value, label }: { value: string; label: string }) { return <div><div className="font-[family-name:var(--font-display)] text-4xl">{value}</div><p className="mt-2 text-sm text-[#71807a]">{label}</p></div> }
+import { Card, CardContent } from '@/components/ui/card';
+import { GraduationCap, BookOpen, Award, TrendingUp, ArrowRight, Newspaper } from 'lucide-react';
+
+export default function HomePage() {
+  const { courses, loading } = useCourses();
+  const { posts, loading: postsLoading } = usePublishedPosts();
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+
+      {/* Hero Section */}
+      <section className="relative overflow-hidden border-b">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5" />
+        <div className="relative mx-auto max-w-7xl px-4 py-20 md:px-6 md:py-28">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border bg-secondary px-4 py-1.5 text-sm font-medium">
+              <GraduationCap className="h-4 w-4" />
+              Professional Learning Platform
+            </div>
+            <h1 className="text-4xl font-bold tracking-tight md:text-6xl">
+              Learn Without Limits
+            </h1>
+            <p className="mt-6 text-lg text-muted-foreground md:text-xl">
+              Master new skills with expert-led courses, interactive lessons, and quizzes.
+              Track your progress and achieve your learning goals.
+            </p>
+            <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <Button size="lg" asChild>
+                <Link href="/courses">Browse Courses <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
+              <Button size="lg" variant="outline" asChild>
+                <Link href="/register">Get Started Free</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section className="border-b py-16">
+        <div className="mx-auto max-w-7xl px-4 md:px-6">
+          <div className="grid gap-8 md:grid-cols-3">
+            <Card>
+              <CardContent className="pt-6">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                  <BookOpen className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="mb-2 text-lg font-semibold">Expert-Led Courses</h3>
+                <p className="text-sm text-muted-foreground">
+                  Learn from industry professionals with structured, comprehensive course content.
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="pt-6">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                  <Award className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="mb-2 text-lg font-semibold">Interactive Quizzes</h3>
+                <p className="text-sm text-muted-foreground">
+                  Test your knowledge with quizzes and get instant results and feedback.
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="pt-6">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                  <TrendingUp className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="mb-2 text-lg font-semibold">Track Progress</h3>
+                <p className="text-sm text-muted-foreground">
+                  Monitor your learning journey with detailed progress tracking and results.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Courses Section */}
+      <section className="py-16">
+        <div className="mx-auto max-w-7xl px-4 md:px-6">
+          <div className="mb-8 flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold">Featured Courses</h2>
+              <p className="text-muted-foreground">Explore our available courses</p>
+            </div>
+            <Button variant="outline" asChild>
+              <Link href="/courses">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            </Button>
+          </div>
+          {loading ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {[1, 2, 3].map((i) => <div key={i} className="h-64 animate-pulse rounded-lg bg-muted" />)}
+            </div>
+          ) : (
+            <CourseList courses={courses.slice(0, 6)} emptyMessage="No courses available yet" />
+          )}
+        </div>
+      </section>
+
+      {/* Blog Section */}
+      <section className="border-t bg-muted/30 py-16">
+        <div className="mx-auto max-w-7xl px-4 md:px-6">
+          <div className="mb-8 flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold">Latest from the Blog</h2>
+              <p className="text-muted-foreground">Articles and updates from CPS Academy</p>
+            </div>
+            <Button variant="outline" asChild>
+              <Link href="/blog">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            </Button>
+          </div>
+          {postsLoading ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {[1, 2, 3].map((i) => <div key={i} className="h-64 animate-pulse rounded-lg bg-muted" />)}
+            </div>
+          ) : (
+            <BlogList posts={posts.slice(0, 3)} emptyMessage="No blog posts yet" />
+          )}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="border-t py-16">
+        <div className="mx-auto max-w-3xl px-4 text-center md:px-6">
+          <h2 className="text-3xl font-bold">Ready to Start Learning?</h2>
+          <p className="mt-4 text-muted-foreground">
+            Join CPS Academy today and take your first step towards mastering new skills.
+          </p>
+          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Button size="lg" asChild>
+              <Link href="/register">Create Account</Link>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <Link href="/login">Sign In</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}

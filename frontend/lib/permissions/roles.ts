@@ -1,2 +1,0 @@
-export const rolePermissions = { admin: ['manage:all'], content_manager: ['manage:content', 'view:progress'], instructor: ['manage:own-courses', 'view:own-progress'], student: ['learn', 'view:own-progress'] } as const;
-export function can(role: keyof typeof rolePermissions, permission: string) { return rolePermissions[role]?.includes(permission as never) || rolePermissions[role]?.includes('manage:all' as never); }

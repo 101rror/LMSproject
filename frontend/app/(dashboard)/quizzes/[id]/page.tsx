@@ -1,4 +1,72 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Check, Circle } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { DashboardLayout } from '@/components/layout/DashboardLayout';
+import { fetchQuiz } from '@/lib/api/quizzes';
+import { createQuizResult } from '@/lib/api/results';
+import { QuizPlayer } from '@/components/quizzes/QuizPlayer';
 import { Button } from '@/components/ui/button';
-export default async function QuizPage({ params }: { params: Promise<{ id: string }> }) { await params; return <div className="mx-auto max-w-3xl"><Link href="/my-courses" className="inline-flex items-center gap-2 text-sm font-bold text-[#71807a]"><ArrowLeft size={16} /> Back to course</Link><header className="mt-12"><p className="text-xs font-bold uppercase tracking-[.18em] text-[var(--coral)]">Knowledge check · 4 questions</p><h1 className="mt-3 font-[family-name:var(--font-display)] text-5xl">Make it memorable</h1><p className="mt-4 text-[#71807a]">Take a moment. There is no timer.</p></header><form className="mt-12 space-y-8">{['What makes a direction useful?', 'Where should you begin with messy ideas?'].map((question, i) => <fieldset key={question} className="rounded-2xl border border-[var(--line)] bg-white p-6"><legend className="mb-5 font-[family-name:var(--font-display)] text-2xl">0{i + 1} · {question}</legend>{['It is easy to explain', 'It creates a useful next step', 'It has no constraints'].map((answer, j) => <label key={answer} className="mb-2 flex cursor-pointer items-center gap-3 rounded-xl border border-[var(--line)] p-4 text-sm font-semibold hover:border-[var(--coral)]"><input type="radio" name={`question-${i}`} className="accent-[var(--coral)]" /><Circle size={16} className="text-[#aab5af]" /><span>{answer}</span>{j === 1 && <Check size={16} className="ml-auto text-[#7daa97]" />}</label>)}</fieldset>)}<Button type="submit" className="w-full">Submit answers</Button></form></div> }
+import { ArrowLeft } from 'lucide-react';
+import type { Quiz } from '@/types/quiz';
+
+export default function QuizTakePage() {
+  const params = useParams();
+  const router = useRouter();
+  const id = params.id as string;
+  const { user } = useAuth();
+  const [quiz, setQuiz] = useState<Quiz | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchQuiz(id)
+      .then(setQuiz)
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  const handleSubmit = async (_answers: number[], score: number, totalQuestions: number) => {
+    if (!user || !quiz) return;
+    try {
+      await createQuizResult(user.id, quiz.id, score, totalQuestions);
+    } catch {
+      // non-fatal
+    }
+  };
+
+  if (loading) {
+    return (
+      <DashboardLayout allowedRoles={['student']}>
+        <div className="h-96 animate-pulse rounded-lg bg-muted" />
+      </DashboardLayout>
+    );
+  }
+
+  if (!quiz) {
+    return (
+      <DashboardLayout allowedRoles={['student']}>
+        <p>Quiz not found.</p>
+        <Button asChild className="mt-4"><Link href="/my-courses">Back to My Courses</Link></Button>
+      </DashboardLayout>
+    );
+  }
+
+  return (
+    <DashboardLayout allowedRoles={['student']}>
+      <div className="space-y-6">
+        <Button variant="ghost" size="sm" asChild>
+          <Link href="/results"><ArrowLeft className="mr-2 h-4 w-4" /> Back to Results</Link>
+        </Button>
+
+        <div>
+          <h1 className="text-2xl font-bold">{quiz.title}</h1>
+          {quiz.description && <p className="text-muted-foreground">{quiz.description}</p>}
+        </div>
+
+        <QuizPlayer quiz={quiz} onSubmit={handleSubmit} />
+      </div>
+    </DashboardLayout>
+  );
+}

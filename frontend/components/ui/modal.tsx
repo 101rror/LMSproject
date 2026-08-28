@@ -1,3 +1,0 @@
-'use client';
-import { X } from 'lucide-react';
-export function Modal({ open, title, children, onClose }: { open: boolean; title: string; children: React.ReactNode; onClose: () => void }) { if (!open) return null; return <div className="fixed inset-0 z-50 grid place-items-center bg-[var(--ink)]/40 p-6"><div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl"><div className="flex items-center justify-between"><h2 className="font-[family-name:var(--font-display)] text-2xl">{title}</h2><button onClick={onClose} aria-label="Close"><X size={20} /></button></div><div className="mt-6">{children}</div></div></div>; }

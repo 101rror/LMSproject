@@ -16,6 +16,7 @@ export default async (policyContext: any) => {
         return true;
     }
 
+    if (!user && path.startsWith('/api/courses') && method === 'GET') return true;
     if (!user) return false;
     if (!role) return false;
 

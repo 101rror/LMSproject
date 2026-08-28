@@ -1,5 +1,50 @@
-import { SiteHeader } from '@/components/layout/site-header';
-import { CourseCard } from '@/components/courses/course-card';
-import { PageHeader } from '@/components/ui/page-header';
-import { courses } from '@/lib/api/data';
-export default function CoursesPage() { return <><SiteHeader /><main className="mx-auto max-w-7xl px-6 py-20"><PageHeader eyebrow="Course library" title="Follow your curiosity." description="Short, focused courses designed to help you move from interested to capable." /><div className="mt-14 flex flex-wrap gap-2 border-b border-[var(--line)] pb-5 text-sm font-semibold"><button className="rounded-full bg-[var(--ink)] px-4 py-2 text-white">All courses</button><button className="rounded-full px-4 py-2 text-[#71807a] hover:bg-white">Design thinking</button><button className="rounded-full px-4 py-2 text-[#71807a] hover:bg-white">Productivity</button><button className="rounded-full px-4 py-2 text-[#71807a] hover:bg-white">Communication</button></div><div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-4">{courses.map(course => <CourseCard key={course.id} course={course} />)}</div></main></> }
+'use client';
+
+import { Header } from '@/components/layout/Header';
+import { useCourses } from '@/hooks/useCourses';
+import { CourseList } from '@/components/courses/CourseList';
+import { Input } from '@/components/ui/input';
+import { useState } from 'react';
+import { Search } from 'lucide-react';
+
+export default function CoursesPage() {
+  const { courses, loading, error } = useCourses();
+  const [search, setSearch] = useState('');
+
+  const filtered = courses.filter((c) =>
+    c.title.toLowerCase().includes(search.toLowerCase()) ||
+    (c.short_description || c.description).toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+      <div className="mx-auto max-w-7xl px-4 py-8 md:px-6">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold">Browse Courses</h1>
+          <p className="text-muted-foreground">Discover courses to advance your skills</p>
+        </div>
+
+        <div className="relative mb-8 max-w-md">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Search courses..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+
+        {loading ? (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {[1, 2, 3, 4, 5, 6].map((i) => <div key={i} className="h-64 animate-pulse rounded-lg bg-muted" />)}
+          </div>
+        ) : error ? (
+          <div className="rounded-md border border-destructive/50 p-4 text-destructive">{error}</div>
+        ) : (
+          <CourseList courses={filtered} emptyMessage="No courses match your search" />
+        )}
+      </div>
+    </div>
+  );
+}

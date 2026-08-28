@@ -1,3 +1,18 @@
 'use client';
+
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-export default function ErrorPage({ reset }: { error: Error & { digest?: string }; reset: () => void }) { return <main className="grid min-h-screen place-items-center p-6 text-center"><div><p className="text-sm font-bold text-[var(--coral)]">Something went sideways</p><h1 className="mt-3 font-[family-name:var(--font-display)] text-5xl">Let&apos;s try that again.</h1><Button onClick={reset} className="mt-8">Reload page</Button></div></main>; }
+import { AlertTriangle } from 'lucide-react';
+
+export default function Error() {
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center gap-4 p-4">
+      <AlertTriangle className="h-12 w-12 text-destructive" />
+      <h1 className="text-2xl font-bold">Something went wrong</h1>
+      <p className="text-muted-foreground">An unexpected error occurred. Please try again.</p>
+      <Button asChild>
+        <Link href="/">Go Home</Link>
+      </Button>
+    </div>
+  );
+}

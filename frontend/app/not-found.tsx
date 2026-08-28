@@ -1,2 +1,15 @@
 import Link from 'next/link';
-export default function NotFound() { return <main className="grid min-h-screen place-items-center p-6 text-center"><div><p className="text-sm font-bold text-[var(--coral)]">404</p><h1 className="mt-3 font-[family-name:var(--font-display)] text-5xl">That page wandered off.</h1><Link href="/" className="mt-8 inline-block font-bold text-[var(--coral)]">Back to Luma</Link></div></main>; }
+import { Button } from '@/components/ui/button';
+import { HomeIcon } from 'lucide-react';
+
+export default function NotFound() {
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center gap-4 p-4">
+      <h1 className="text-6xl font-bold text-muted-foreground">404</h1>
+      <p className="text-xl text-muted-foreground">Page not found</p>
+      <Button asChild>
+        <Link href="/"><HomeIcon className="mr-2 h-4 w-4" /> Go Home</Link>
+      </Button>
+    </div>
+  );
+}

@@ -1,6 +1,87 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import { Header } from '@/components/layout/Header';
+import { fetchPost } from '@/lib/api/blog';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
-import { SiteHeader } from '@/components/layout/site-header';
-import { Badge } from '@/components/ui/badge';
-import { posts } from '@/lib/api/data';
-export default async function BlogDetails({ params }: { params: Promise<{ id: string }> }) { const { id } = await params; const post = posts.find(item => item.id === id) || posts[0]; return <><SiteHeader /><main className="mx-auto max-w-3xl px-6 py-16"><Link href="/blog" className="inline-flex items-center gap-2 text-sm font-bold text-[#71807a]"><ArrowLeft size={16} /> All journal notes</Link><article className="mt-20"><Badge tone="coral">{post.category}</Badge><h1 className="mt-6 font-[family-name:var(--font-display)] text-6xl leading-none">{post.title}</h1><p className="mt-6 text-sm font-bold text-[#87938d]">{post.date} · {post.readTime}</p><div className="mt-14 space-y-6 text-lg leading-9 text-[#53665e]"><p>{post.excerpt}</p><p>Good learning rarely arrives as a neat, linear transformation. It tends to show up as a question you cannot stop carrying, a useful tension, or the sudden ability to see a familiar problem from another angle.</p><p>Make space for that unfinished middle. It is often where the interesting work begins.</p></div></article></main></> }
+import type { BlogPost } from '@/types/blog-post';
+
+export default function BlogPostPage() {
+  const params = useParams();
+  const id = params.id as string;
+  const [post, setPost] = useState<BlogPost | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchPost(id)
+      .then((p) => {
+        if (!p || !p.publishedAt) {
+          setError('Post not found or not published');
+        } else {
+          setPost(p);
+        }
+      })
+      .catch(() => setError('Failed to load blog post'))
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="mx-auto max-w-3xl px-4 py-8">
+          <div className="h-96 animate-pulse rounded-lg bg-muted" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !post) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="mx-auto max-w-3xl px-4 py-8">
+          <p className="text-destructive">{error || 'Post not found'}</p>
+          <Button asChild className="mt-4"><Link href="/blog">Back to Blog</Link></Button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+      <article className="mx-auto max-w-3xl px-4 py-8 md:px-6">
+        <Button variant="ghost" size="sm" asChild className="mb-4">
+          <Link href="/blog"><ArrowLeft className="mr-2 h-4 w-4" /> Back to Blog</Link>
+        </Button>
+
+        {post.cover_image_url && (
+          <div className="mb-6 aspect-video w-full overflow-hidden rounded-lg bg-muted">
+            <img src={post.cover_image_url} alt={post.title} className="h-full w-full object-cover" />
+          </div>
+        )}
+
+        <h1 className="text-3xl font-bold md:text-4xl">{post.title}</h1>
+        <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
+          {post.author && <span>By {post.author.username}</span>}
+          {post.createdAt && (
+            <>
+              <span>•</span>
+              <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+            </>
+          )}
+        </div>
+
+        <div className="mt-8 whitespace-pre-line text-lg leading-relaxed text-muted-foreground">
+          {post.body}
+        </div>
+      </article>
+    </div>
+  );
+}
