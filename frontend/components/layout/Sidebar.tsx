@@ -33,12 +33,11 @@ const NAV_BY_ROLE: Record<UserRole, NavItem[]> = {
     { label: 'Student Progress', href: '/management/progress', icon: TrendingUp },
   ],
   content_manager: [
-    { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { label: 'Courses', href: '/management/courses', icon: BookOpen },
-    { label: 'Lessons', href: '/management/lessons', icon: Layers },
-    { label: 'Quizzes', href: '/management/quizzes', icon: HelpCircle },
-    { label: 'Blog Posts', href: '/management/blog', icon: Newspaper },
-    { label: 'Progress', href: '/management/progress', icon: TrendingUp },
+    { label: 'Dashboard', href: '/manager/dashboard', icon: LayoutDashboard },
+    { label: 'Browse Courses', href: '/courses', icon: BookOpen },
+    { label: 'My Courses', href: '/my-courses', icon: GraduationCap },
+    { label: 'Results', href: '/results', icon: Award },
+    { label: 'Blog', href: '/blog', icon: Newspaper },
   ],
   admin: [
     { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },

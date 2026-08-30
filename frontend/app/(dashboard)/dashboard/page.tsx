@@ -15,8 +15,14 @@ export default function DashboardPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && user && user.role === 'admin') {
-      router.replace(ROLE_ROUTES.admin);
+    if (!loading && user) {
+      if (user.role === 'admin') {
+        router.replace(ROLE_ROUTES.admin);
+        return;
+      }
+      if (user.role === 'content_manager') {
+        router.replace(ROLE_ROUTES.content_manager);
+      }
     }
   }, [user, loading, router]);
 
@@ -28,8 +34,8 @@ export default function DashboardPage() {
     );
   }
 
-  // Admins get redirected to /admin
-  if (user.role === 'admin') {
+  // Admins and manager/content-manager users are redirected to their role-specific dashboard
+  if (user.role === 'admin' || user.role === 'content_manager') {
     return (
       <div className="flex h-screen items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
@@ -41,7 +47,6 @@ export default function DashboardPage() {
     <DashboardLayout>
       {user.role === 'student' && <StudentDashboard />}
       {user.role === 'instructor' && <InstructorDashboard />}
-      {user.role === 'content_manager' && <ContentManagerDashboard />}
     </DashboardLayout>
   );
 }

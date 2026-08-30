@@ -26,7 +26,7 @@ export const ROLE_LABELS: Record<UserRole, string> = {
 
 export const ROLE_ROUTES: Record<UserRole, string> = {
   admin: '/admin',
-  content_manager: '/dashboard',
+  content_manager: '/manager/dashboard',
   instructor: '/dashboard',
   student: '/dashboard',
 };
@@ -41,6 +41,28 @@ export function canManageBlog(role: UserRole): boolean {
 
 export function canManageCourses(role: UserRole): boolean {
   return role === 'admin' || role === 'content_manager' || role === 'instructor';
+}
+
+export function canCreateCourse(role: UserRole): boolean {
+  return canManageCourses(role);
+}
+
+export function canEditCourse(
+  role: UserRole,
+  courseOwnerId?: number | null,
+  currentUserId?: number | null
+): boolean {
+  if (role === 'admin' || role === 'content_manager') return true;
+  if (role === 'instructor') return Boolean(currentUserId) && (!courseOwnerId || courseOwnerId === currentUserId);
+  return false;
+}
+
+export function canDeleteCourse(
+  role: UserRole,
+  courseOwnerId?: number | null,
+  currentUserId?: number | null
+): boolean {
+  return canEditCourse(role, courseOwnerId, currentUserId);
 }
 
 export function canManageLessons(role: UserRole): boolean {

@@ -8,6 +8,7 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { CourseForm } from '@/components/courses/CourseForm';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { canCreateCourse, canDeleteCourse, canEditCourse } from '@/lib/auth/roles';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription
 } from '@/components/ui/dialog';
@@ -24,13 +25,19 @@ export default function ManagementCoursesPage() {
   const { courses: instructorCourses, loading: instLoading } = useInstructorCourses(isContentManager ? null : (user?.id ?? null));
   const { remove, saving } = useCourseMutations();
   const [deleteTarget, setDeleteTarget] = useState<Course | null>(null);
-  const [editTarget, setEditTarget] = useState<Course | null>(null);
 
   const courses = isContentManager ? allCourses : instructorCourses;
   const loading = isContentManager ? allLoading : instLoading;
 
+  const canCreate = !!user && canCreateCourse(user.role);
+
   const handleDelete = async () => {
-    if (!deleteTarget) return;
+    if (!deleteTarget || !user) return;
+    const ownerId = deleteTarget.instructor?.id ?? null;
+    if (!canDeleteCourse(user.role, ownerId, user.id)) {
+      setDeleteTarget(null);
+      return;
+    }
     try {
       await remove(deleteTarget.documentId || String(deleteTarget.id));
       setDeleteTarget(null);
@@ -50,9 +57,11 @@ export default function ManagementCoursesPage() {
               {isContentManager ? 'Manage all platform courses' : 'Manage your courses'}
             </p>
           </div>
-          <Button asChild>
-            <Link href="/management/courses/create"><Plus className="mr-2 h-4 w-4" /> Create Course</Link>
-          </Button>
+          {canCreate && (
+            <Button asChild>
+              <Link href="/management/courses/create"><Plus className="mr-2 h-4 w-4" /> Create Course</Link>
+            </Button>
+          )}
         </div>
 
         {loading ? (
@@ -82,14 +91,18 @@ export default function ManagementCoursesPage() {
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button size="sm" variant="outline" asChild>
-                      <Link href={`/management/courses/${course.documentId || course.id}/edit`}>
-                        <Edit className="mr-1 h-3 w-3" /> Edit
-                      </Link>
-                    </Button>
-                    <Button size="sm" variant="destructive" onClick={() => setDeleteTarget(course)} disabled={saving}>
-                      <Trash2 className="mr-1 h-3 w-3" /> Delete
-                    </Button>
+                    {user && canEditCourse(user.role, course.instructor?.id ?? null, user.id) && (
+                      <Button size="sm" variant="outline" asChild>
+                        <Link href={`/management/courses/${course.documentId || course.id}/edit`}>
+                          <Edit className="mr-1 h-3 w-3" /> Edit
+                        </Link>
+                      </Button>
+                    )}
+                    {user && canDeleteCourse(user.role, course.instructor?.id ?? null, user.id) && (
+                      <Button size="sm" variant="destructive" onClick={() => setDeleteTarget(course)} disabled={saving}>
+                        <Trash2 className="mr-1 h-3 w-3" /> Delete
+                      </Button>
+                    )}
                   </div>
                 </CardContent>
               </Card>

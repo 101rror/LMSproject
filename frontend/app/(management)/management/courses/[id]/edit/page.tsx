@@ -8,6 +8,7 @@ import { useCourseMutations } from '@/hooks/useCourses';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { CourseForm } from '@/components/courses/CourseForm';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { canEditCourse } from '@/lib/auth/roles';
 import type { Course } from '@/types/course';
 
 export default function EditCoursePage() {
@@ -22,7 +23,7 @@ export default function EditCoursePage() {
   useEffect(() => {
     fetchCourseByDocumentId(id)
       .then(setCourse)
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -47,8 +48,7 @@ export default function EditCoursePage() {
     );
   }
 
-  // Instructor can only edit their own courses
-  if (user?.role === 'instructor' && course.instructor?.id !== user.id) {
+  if (user && !canEditCourse(user.role, course.instructor?.id ?? null, user.id)) {
     return (
       <DashboardLayout allowedRoles={['instructor', 'content_manager', 'admin']}>
         <p className="text-destructive">You can only edit your own courses.</p>
