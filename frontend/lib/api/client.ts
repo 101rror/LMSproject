@@ -1,4 +1,6 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:1337';
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (process.env.VERCEL_ENV ? '' : 'http://localhost:1337');
 
 const TOKEN_KEY = 'cps_jwt_token';
 const USER_KEY = 'cps_user_data';
